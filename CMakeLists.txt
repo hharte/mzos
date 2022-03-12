@@ -7,7 +7,6 @@ project ("mzos")
 
 # Add source to this project's executable.
 add_executable (mzos "mzos.c" )
-target_link_libraries(mzos -static)
 
 set(CMAKE_FIND_LIBRARY_SUFFIXES ".lib")
 if (MSVC)
