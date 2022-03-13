@@ -1,6 +1,7 @@
 # mzos - Vector Graphic MZOS Disk Utility
 
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/50fcbfcf3f634e5b90a8b979fda156fa)](https://www.codacy.com/gh/hharte/mzos/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=hharte/mzos&amp;utm_campaign=Badge_Grade)
+[![Coverity](https://scan.coverity.com/projects/24658/badge.svg)](https://scan.coverity.com/projects/hharte-mzos)
 
 Vector Graphic own operating system for use with their System B computer systems  These disks have a very simple file system, where every file has to be contiguous.
 
