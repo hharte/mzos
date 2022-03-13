@@ -121,6 +121,7 @@ int main(int argc, char *argv[])
 		return (-1);
 	}
 
+	args.image_filename[sizeof(args.image_filename) - 1] = '\0';
 	if (strncasecmp(&args.image_filename[strlen(args.image_filename) - 4], ".vgi", 4) == 0) {
 		args.vgi = 1;
 	}
@@ -160,6 +161,18 @@ int main(int argc, char *argv[])
 			goto exit_main;
 		} else if (!strncasecmp(args.operation, "EX", 2)) {
 			for (i = 0; i < DIR_ENTRIES_MAX; i++) {
+				if (!strncmp(dir_entry_list[i].sname, "        ", SNAME_LEN)) {
+					continue;
+				}
+				if (dir_entry_list[i].disk_address > MZ_SECTORS_MAX) {
+					printf("Invalid disk address %d, skipping extraction.\n", dir_entry_list[i].disk_address);
+					continue;
+				}
+				if (dir_entry_list[i].block_count > MZ_SECTORS_MAX) {
+					printf("Invalid block count %d, skipping extraction.\n", dir_entry_list[i].disk_address);
+					continue;
+				}
+
 				result = mz_extract_file(&dir_entry_list[i], instream, args.output_path, args.quiet, args.vgi);
 				if (result == 0) {
 					extracted_file_count++;
@@ -340,6 +353,7 @@ int mz_extract_file(mz_dir_entry_t* dir_entry, FILE* instream, char *path, int q
 	}
 
 	printf("Memory allocation of %d bytes failed\n", file_len);
+	fclose(ostream);
 	return (-ENOMEM);
 }
 
@@ -365,7 +379,10 @@ int mz_read_sectors(FILE* stream, uint16_t start_sector, uint16_t count, uint8_t
 		if (sector_size == VGI_SECTOR_LEN) {
 			file_offset += VGI_HEADER_LEN;	/* Skip over VGI sector header */
 		}
-		fseek(stream, file_offset, SEEK_SET);
+		if (0 != fseek(stream, file_offset, SEEK_SET)) {
+			return 0;
+		}
+
 		sectors_read += fread(bufptr, MZ_BLOCK_SIZE, 1, stream);
 		bufptr += MZ_BLOCK_SIZE;
 	}
