@@ -1,12 +1,13 @@
-﻿# CMakeList.txt : CMake project for mzos, include source and define
-# project specific logic here.
+# CMakeList.txt : CMake project for mzos
 #
 cmake_minimum_required (VERSION 3.8)
 
 project ("mzos")
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # Add source to this project's executable.
-add_executable (mzos "mzos.c" )
+add_executable (mzos "mzos.c" "mzos.h")
 
 set(CMAKE_FIND_LIBRARY_SUFFIXES ".lib")
 if (MSVC)
